@@ -10,7 +10,7 @@ import {
 } from "@/lib/physics/twoBody";
 import { IntegratorId, INTEGRATOR_META } from "@/lib/physics/integrators";
 import { Panel, Readout, Badge } from "@/components/ui/Panel";
-import { Slider, Segmented, Toggle } from "@/components/ui/Slider";
+import { Slider, Segmented } from "@/components/ui/Slider";
 import { Play, Pause, RotateCcw, StepForward, ZoomIn, ZoomOut, Maximize2 } from "lucide-react";
 
 const METHODS: { id: IntegratorId; label: string }[] = [
@@ -46,6 +46,41 @@ const DEFAULT_VIEW: ViewOptions = {
 };
 
 const TRAIL_MAX = 1400;
+
+// Custom Toggle component that works reliably
+const ToggleSwitch = ({ 
+  label, 
+  checked, 
+  onChange 
+}: { 
+  label: string; 
+  checked: boolean; 
+  onChange: (checked: boolean) => void;
+}) => {
+  return (
+    <div className="flex items-center justify-between py-2.5">
+      <span className="text-[13px] text-ink">{label}</span>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        onClick={() => onChange(!checked)}
+        className={`
+          relative inline-flex h-5 w-10 items-center rounded-full transition-colors
+          ${checked ? 'bg-kinetic' : 'bg-line'}
+          focus:outline-none focus:ring-2 focus:ring-kinetic/50
+        `}
+      >
+        <span
+          className={`
+            inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform
+            ${checked ? 'translate-x-5' : 'translate-x-1'}
+          `}
+        />
+      </button>
+    </div>
+  );
+};
 
 export default function TwoBodySimulator() {
   const [presetId, setPresetId] = useState(TWO_BODY_PRESETS[0].id);
@@ -317,6 +352,11 @@ export default function TwoBodySimulator() {
 
   const fmt = (v: number, d = 3) => (Number.isFinite(v) ? v.toFixed(d) : "—");
 
+  // Handle toggle changes
+  const handleToggle = useCallback((key: keyof ViewOptions) => {
+    setView(prev => ({ ...prev, [key]: !prev[key] }));
+  }, []);
+
   return (
     <div className="grid grid-cols-1 xl:grid-cols-[1fr_340px] gap-5">
       {/* Canvas + top controls */}
@@ -452,15 +492,47 @@ export default function TwoBodySimulator() {
         </Panel>
 
         <Panel title="View & Overlays" eyebrow="Display">
-          <div className="p-4 divide-y divide-line/60">
-            <Toggle label="Motion trails" checked={view.trails} onChange={(v) => setView((s) => ({ ...s, trails: v }))} />
-            <Toggle label="Velocity vectors" checked={view.velocityVectors} onChange={(v) => setView((s) => ({ ...s, velocityVectors: v }))} />
-            <Toggle label="Acceleration vectors" checked={view.accelVectors} onChange={(v) => setView((s) => ({ ...s, accelVectors: v }))} />
-            <Toggle label="Force vectors" checked={view.forceVectors} onChange={(v) => setView((s) => ({ ...s, forceVectors: v }))} />
-            <Toggle label="Center of mass" checked={view.centerOfMass} onChange={(v) => setView((s) => ({ ...s, centerOfMass: v }))} />
-            <Toggle label="Camera follow (COM)" checked={view.focus} onChange={(v) => setView((s) => ({ ...s, focus: v }))} />
-            <Toggle label="Coordinate grid" checked={view.grid} onChange={(v) => setView((s) => ({ ...s, grid: v }))} />
-            <Toggle label="Field lines" checked={view.fieldLines} onChange={(v) => setView((s) => ({ ...s, fieldLines: v }))} />
+          <div className="px-4 py-2 pr-5 divide-y divide-line/60">
+            <ToggleSwitch 
+              label="Motion trails" 
+              checked={view.trails} 
+              onChange={() => handleToggle("trails")} 
+            />
+            <ToggleSwitch 
+              label="Velocity vectors" 
+              checked={view.velocityVectors} 
+              onChange={() => handleToggle("velocityVectors")} 
+            />
+            <ToggleSwitch 
+              label="Acceleration vectors" 
+              checked={view.accelVectors} 
+              onChange={() => handleToggle("accelVectors")} 
+            />
+            <ToggleSwitch 
+              label="Force vectors" 
+              checked={view.forceVectors} 
+              onChange={() => handleToggle("forceVectors")} 
+            />
+            <ToggleSwitch 
+              label="Center of mass" 
+              checked={view.centerOfMass} 
+              onChange={() => handleToggle("centerOfMass")} 
+            />
+            <ToggleSwitch 
+              label="Camera follow (COM)" 
+              checked={view.focus} 
+              onChange={() => handleToggle("focus")} 
+            />
+            <ToggleSwitch 
+              label="Coordinate grid" 
+              checked={view.grid} 
+              onChange={() => handleToggle("grid")} 
+            />
+            <ToggleSwitch 
+              label="Field lines" 
+              checked={view.fieldLines} 
+              onChange={() => handleToggle("fieldLines")} 
+            />
           </div>
         </Panel>
 
@@ -471,7 +543,6 @@ export default function TwoBodySimulator() {
             <Slider label="Mass m₂" value={params.m2} min={1} max={200} step={1} onChange={(v) => setParams((p) => ({ ...p, m2: v }))} />
             <Slider label="Softening length" value={params.softening} min={0} max={0.3} step={0.01} onChange={(v) => setParams((p) => ({ ...p, softening: v }))} />
             <Slider label="Restitution" value={params.restitution} min={0} max={1} step={0.05} onChange={(v) => setParams((p) => ({ ...p, restitution: v }))} />
-            <Toggle label="Collisions enabled" checked={params.collisionsEnabled} onChange={(v) => setParams((p) => ({ ...p, collisionsEnabled: v }))} />
           </div>
         </Panel>
       </div>

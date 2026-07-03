@@ -12,7 +12,7 @@ import {
 } from "@/lib/physics/projectile";
 import { IntegratorId, INTEGRATOR_META } from "@/lib/physics/integrators";
 import { Panel, Readout, Badge } from "@/components/ui/Panel";
-import { Slider, Segmented, Toggle } from "@/components/ui/Slider";
+import { Slider, Segmented } from "@/components/ui/Slider";
 import { Play, Pause, RotateCcw } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -63,6 +63,41 @@ const GRAPHS: { key: keyof Sample | "vx" | "vy"; label: string; color: string; u
   { key: "pe", label: "Potential Energy", color: "#7c5cff", unit: "J" },
   { key: "te", label: "Total Mechanical Energy", color: "#ffb020", unit: "J" },
 ];
+
+// Custom Toggle component that works reliably
+const ToggleSwitch = ({ 
+  label, 
+  checked, 
+  onChange 
+}: { 
+  label: string; 
+  checked: boolean; 
+  onChange: (checked: boolean) => void;
+}) => {
+  return (
+    <div className="flex items-center justify-between py-1">
+      <span className="text-[13px] text-ink">{label}</span>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        onClick={() => onChange(!checked)}
+        className={`
+          relative inline-flex h-5 w-10 items-center rounded-full transition-colors
+          ${checked ? 'bg-kinetic' : 'bg-line'}
+          focus:outline-none focus:ring-2 focus:ring-kinetic/50
+        `}
+      >
+        <span
+          className={`
+            inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform
+            ${checked ? 'translate-x-5' : 'translate-x-1'}
+          `}
+        />
+      </button>
+    </div>
+  );
+};
 
 export default function ProjectileSimulator() {
   const [presetId, setPresetId] = useState(PROJECTILE_PRESETS[0].id);
@@ -368,7 +403,11 @@ export default function ProjectileSimulator() {
           <div className="p-4 space-y-3">
             <Segmented options={METHODS} value={method} onChange={setMethod} />
             <p className="text-[12px] text-ink-faint leading-relaxed">{methodMeta.description}</p>
-            <Toggle label="Show vacuum reference (dashed)" checked={showVacuumOverlay} onChange={setShowVacuumOverlay} />
+            <ToggleSwitch 
+              label="Show vacuum reference (dashed)" 
+              checked={showVacuumOverlay} 
+              onChange={setShowVacuumOverlay} 
+            />
           </div>
         </Panel>
 
