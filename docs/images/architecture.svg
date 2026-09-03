@@ -1,0 +1,53 @@
+<svg width="1100" height="480" viewBox="0 0 1100 480" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="a2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <style>
+      .box { fill:#11121c; stroke:#2a2b3d; stroke-width:1.5; rx:12; }
+      .title { font-family: 'Space Grotesk', Arial, sans-serif; font-size:15px; font-weight:700; fill:#f2f2f6; }
+      .sub { font-family: 'JetBrains Mono', monospace; font-size:11px; fill:#8c8ca3; }
+      .lbl { font-family: 'Inter', Arial, sans-serif; font-size:12px; fill:#c9c9d8; }
+      .arrow { stroke:#4b4d66; stroke-width:1.6; fill:none; marker-end:url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#4b4d66"/>
+    </marker>
+  </defs>
+  <rect width="1100" height="480" fill="#05060c"/>
+
+  <!-- UI layer -->
+  <rect x="60" y="40" width="980" height="90" class="box"/>
+  <text x="84" y="68" class="title">app/ — Next.js App Router</text>
+  <text x="84" y="88" class="sub">page.tsx · simulations/two-body · simulations/projectile · comparison · documentation · gallery · about</text>
+  <text x="84" y="108" class="lbl">Route-level pages that compose UI components and wire user input to the physics engine.</text>
+
+  <!-- Components layer -->
+  <rect x="60" y="165" width="470" height="130" class="box"/>
+  <text x="84" y="193" class="title">components/simulators</text>
+  <text x="84" y="213" class="lbl">TwoBodySimulator.tsx — canvas render loop, trails,</text>
+  <text x="84" y="231" class="lbl">vector overlays, energy monitor, presets</text>
+  <text x="84" y="253" class="lbl">ProjectileSimulator.tsx — trajectory canvas,</text>
+  <text x="84" y="271" class="lbl">10 synchronized live Recharts graphs</text>
+
+  <rect x="570" y="165" width="470" height="130" class="box"/>
+  <text x="594" y="193" class="title">components/{docs, comparison, home, ui}</text>
+  <text x="594" y="213" class="lbl">FormulaCard, LearnPanel — derivations &amp; theory</text>
+  <text x="594" y="231" class="lbl">IntegratorComparison — accuracy / cost / drift</text>
+  <text x="594" y="249" class="lbl">Panel, Slider, FeatureCard, HeroOrbit — shared UI</text>
+  <text x="594" y="267" class="lbl">and homepage building blocks</text>
+
+  <!-- Physics core -->
+  <rect x="230" y="330" width="640" height="120" class="box" stroke="url(#a2)"/>
+  <text x="254" y="360" class="title">lib/physics — pure TypeScript ODE engine</text>
+  <text x="254" y="384" class="lbl">integrators.ts — Explicit &amp; Semi-Implicit Euler, Improved Euler,</text>
+  <text x="254" y="402" class="lbl">Velocity Verlet, RK4, adaptive RK45</text>
+  <text x="254" y="424" class="lbl">twoBody.ts (Newtonian gravitation)  ·  projectile.ts (vacuum / linear / quadratic drag)</text>
+
+  <!-- arrows -->
+  <path d="M300,130 L300,165" class="arrow"/>
+  <path d="M800,130 L800,165" class="arrow"/>
+  <path d="M300,295 L500,330" class="arrow"/>
+  <path d="M800,295 L620,330" class="arrow"/>
+</svg>
