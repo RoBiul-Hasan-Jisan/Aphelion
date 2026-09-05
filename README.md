@@ -4,7 +4,7 @@
 
 <br/>
 
-<img src="public/logo.png" alt="Aphelion logo" width="72" />
+
 
 ### Aphelion
 
